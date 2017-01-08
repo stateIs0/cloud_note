@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.dao.NoteDao">
+	
+	<select id="findByParam" parameterType="map" resultType="map">
+		select
+			cn_note_id id,
+			cn_note_title title,
+			cn_note_body body
+		from 
+			(select * from cn_note order by cn_note_last_modify_time desc) t 
+		 	<!--  ${tableName} -->
+		 where
+		 	cn_notebook_id=#{notebookId}
+		 	<if test="start !=null">
+		 		limit #{start},#{rows}
+		 	</if>
+		 	
+	 	 <!-- order by cn_note_last_modify_time des -->
+	</select>
+	
+	
+	
+	<insert id="add" parameterType="cn.tedu.entity.Note">
+		insert into 
+			cn_note
+			(
+			cn_note_id,
+			cn_notebook_id,
+			cn_user_id,
+			cn_note_status_id,
+			cn_note_type_id,
+			cn_note_title,
+			cn_note_body,
+			cn_note_create_time,
+			cn_note_last_modify_time
+			)
+		values
+			(
+			#{id},
+			#{notebookId},
+			#{userId},
+			#{statusId},
+			#{typeId},
+			#{title},
+			#{body},
+			#{createTime},
+			#{lastModifyTime}
+			)
+	</insert>
+	
+	<delete id="delete" parameterType="cn.tedu.entity.Note">
+		delete
+		from 
+			cn_note
+		where
+			cn_note_id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="cn.tedu.entity.Note">
+		update 
+			cn_note
+		set
+			cn_note_body=#{body},
+			cn_note_title=#{title}
+		where
+			cn_note_id=#{id}
+	</update>
+	
+	<select id="findById" resultType="cn.tedu.entity.Note">
+		select 
+			cn_note_id id,
+			cn_note_title title,
+			cn_note_body body
+		from 
+			cn_note
+		where 
+			cn_note_id=#{noteId}
+	</select>
+</mapper>
+
+
+
+
+
+
+
